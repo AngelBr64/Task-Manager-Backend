@@ -1,9 +1,9 @@
 const express = require('express');
 const cors = require('cors');
-const authRoutes = require('./routes/authRoutes'); // Fixed the variable name here
+const authRoutes = require('./routes/authRoutes'); // Make sure this path is correct
 
 const app = express();
-const PORT = process.env.PORT || 5000; // Better to use environment variable
+const PORT = process.env.PORT || 5000;
 
 const allowedOrigins = [
   'https://task-manager-frontend-five-chi.vercel.app',
@@ -21,12 +21,13 @@ const corsOptions = {
   credentials: true
 };
 
+// Middlewares
 app.use(cors(corsOptions));
 app.use(express.json());
 
-// Routes - only need one line since you're importing as authRoutes
-app.use('/api', authRoutes); // Removed the trailing slash for consistency
+// Routes
+app.use('/api', authRoutes); // Using the imported authRoutes
 
 app.listen(PORT, () => {
-  console.log(`Server running on http://localhost:${PORT}`);
+  console.log(`Server running on port ${PORT}`);
 });
