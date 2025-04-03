@@ -1,15 +1,20 @@
-// backend/server.js
 const express = require('express');
 const cors = require('cors');
-const authRoutes = require('./routes/authRoutes');
 
 const app = express();
-const PORT = 5000;
+const PORT = process.env.PORT || 5000;
 
-app.use(cors());
+// Configurar CORS correctamente
+app.use(cors({
+  origin: "https://task-manager-frontend-five-chi.vercel.app", // Tu frontend en Vercel
+  methods: "GET,POST,PUT,DELETE",
+  allowedHeaders: "Content-Type,Authorization"
+}));
+
 app.use(express.json());
 
-// Rutas
+// Importar y usar rutas
+const authRoutes = require('./routes/authRoutes');
 app.use('/api/', authRoutes);
 
 app.listen(PORT, () => {
