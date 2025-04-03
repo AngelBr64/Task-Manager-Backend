@@ -12,7 +12,18 @@ app.use(cors({
   allowedHeaders: "Content-Type,Authorization"
 }));
 
+// Manejar preflight requests (CORS)
+app.options('*', cors());
+
 app.use(express.json());
+
+// Middleware global para agregar headers CORS en cada respuesta
+app.use((req, res, next) => {
+  res.header("Access-Control-Allow-Origin", "https://task-manager-frontend-five-chi.vercel.app");
+  res.header("Access-Control-Allow-Methods", "GET,POST,PUT,DELETE");
+  res.header("Access-Control-Allow-Headers", "Content-Type,Authorization");
+  next();
+});
 
 // Rutas
 app.use('/api/', authRoutes);
