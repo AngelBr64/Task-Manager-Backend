@@ -1,43 +1,35 @@
 const express = require('express');
 const cors = require('cors');
-const authRoutes = require('./routes/authRoutes');
+const path = require('path');
+
+// Importación absoluta para evitar errores
+const authRoutes = require(path.join(__dirname, 'routes', 'authRoutes'));
 
 const app = express();
 const PORT = process.env.PORT || 5000;
 
-// CORS Configuration
-const allowedOrigins = [
-  'https://task-manager-frontend-five-chi.vercel.app',
-  'http://localhost:3000'
-];
-
+// Configuración CORS más flexible para desarrollo
 app.use(cors({
-  origin: function (origin, callback) {
-    if (!origin || allowedOrigins.indexOf(origin) !== -1) {
-      callback(null, true);
-    } else {
-      callback(new Error('Not allowed by CORS'));
-    }
-  },
+  origin: true, // Permite todos los orígenes (ajustar en producción)
   credentials: true
 }));
 
 app.use(express.json());
 
-// Routes
-app.use('/api', authRoutes);
-
-// Health check endpoint
-app.get('/health', (req, res) => {
-  res.status(200).json({ status: 'healthy' });
+// Ruta de prueba inicial
+app.get('/', (req, res) => {
+  res.send('API Funcionando');
 });
 
-// Error handling middleware
+// Rutas API
+app.use('/api', authRoutes);
+
+// Manejo de errores mejorado
 app.use((err, req, res, next) => {
-  console.error(err.stack);
-  res.status(500).json({ error: 'Something went wrong!' });
+  console.error('Error:', err);
+  res.status(500).json({ error: err.message || 'Error interno del servidor' });
 });
 
 app.listen(PORT, () => {
-  console.log(`Server running on port ${PORT}`);
+  console.log(`Servidor iniciado en puerto ${PORT}`);
 });
