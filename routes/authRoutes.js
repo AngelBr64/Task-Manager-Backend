@@ -1,27 +1,39 @@
 const express = require('express');
 const router = express.Router();
-const authController = require(path.join(__dirname, '..', 'controllers', 'authController'));
+const path = require('path');
+const {
+  registerUser,
+  loginUser,
+  createTask,
+  getTasksByUser,
+  updateTask,
+  deleteTask,
+  createGroup,
+  getGroupsByUser,
+  addMemberToGroup,
+  removeMemberFromGroup
+} = require(path.resolve(__dirname, '..', 'controllers', 'authController'));
 
-// Rutas de autenticación
-router.post('/auth/register', authController.registerUser);
-router.post('/auth/login', authController.loginUser);
+// Authentication routes
+router.post('/register', registerUser);
+router.post('/login', loginUser);
 
-// Rutas de tareas
+// Task routes
 router.route('/tasks')
-  .post(authController.createTask)
-  .get(authController.getTasksByUser);
+  .post(createTask)
+  .get(getTasksByUser);
 
 router.route('/tasks/:id')
-  .put(authController.updateTask)
-  .delete(authController.deleteTask);
+  .put(updateTask)
+  .delete(deleteTask);
 
-// Rutas de grupos
+// Group routes
 router.route('/groups')
-  .post(authController.createGroup)
-  .get(authController.getGroupsByUser);
+  .post(createGroup)
+  .get(getGroupsByUser);
 
 router.route('/groups/:groupId/members/:userId')
-  .post(authController.addMemberToGroup)
-  .delete(authController.removeMemberFromGroup);
+  .post(addMemberToGroup)
+  .delete(removeMemberFromGroup);
 
 module.exports = router;
