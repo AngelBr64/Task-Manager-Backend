@@ -1,39 +1,38 @@
+// backend/routes/authRoutes.js
 const express = require('express');
-const router = express.Router();
-const path = require('path');
 const {
   registerUser,
   loginUser,
   createTask,
-  getTasksByUser,
-  updateTask,
+  getTasksByGroup,
   deleteTask,
+  updateTask,
   createGroup,
-  getGroupsByUser,
   addMemberToGroup,
-  removeMemberFromGroup
-} = require(path.resolve(__dirname, '..', 'controllers', 'authController'));
+  getUsers,
+  getGroupsByUser,
+  getTasksByUser,
+  getGroupTasks,
+  updateUser,
+  removeMemberFromGroup,
+} = require('../controllers/authController');
 
-// Authentication routes
+const router = express.Router();
+
+// Rutas existentes
 router.post('/register', registerUser);
 router.post('/login', loginUser);
-
-// Task routes
-router.route('/tasks')
-  .post(createTask)
-  .get(getTasksByUser);
-
-router.route('/tasks/:id')
-  .put(updateTask)
-  .delete(deleteTask);
-
-// Group routes
-router.route('/groups')
-  .post(createGroup)
-  .get(getGroupsByUser);
-
-router.route('/groups/:groupId/members/:userId')
-  .post(addMemberToGroup)
-  .delete(removeMemberFromGroup);
+router.post('/tasks', createTask);
+router.get('/tasks/:selectedGroup', getTasksByGroup);
+router.get('/task/:userId', getTasksByUser);
+router.delete('/tasks/:taskId', deleteTask);
+router.put('/tasks/:taskId', updateTask);
+router.get('/users/:userId', getUsers)
+router.post('/groups', createGroup);
+router.get('/groups/:userId', getGroupsByUser);
+router.post('/groups/:groupId/members/:userId', addMemberToGroup);
+router.delete('/groups/:groupId/members/:userId', removeMemberFromGroup);
+router.get('/groups/:groupId/tasks', getGroupTasks);
+router.put('/users/:userId', updateUser);
 
 module.exports = router;
