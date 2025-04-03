@@ -6,7 +6,13 @@ const authRoutes = require('./routes/authRoutes');
 const app = express();
 const PORT = 5000;
 
-app.use(cors());
+const corsOptions = {
+  origin: 'https://task-manager-frontend-five-chi.vercel.app', // Tu dominio frontend
+  methods: ['GET', 'POST', 'PUT', 'DELETE'], // Métodos permitidos
+  allowedHeaders: ['Content-Type', 'Authorization'], // Encabezados permitidos
+};
+
+app.use(cors(corsOptions));
 app.use(express.json());
 
 // Rutas
